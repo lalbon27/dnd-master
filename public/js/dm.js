@@ -22,13 +22,60 @@ function pickRussianVoice() {
   return voices.find((v) => v.lang && v.lang.toLowerCase().startsWith("ru")) || null;
 }
 
-function speak(text) {
-  if (!voiceToggle.checked || !("speechSynthesis" in window)) return;
-  const utter = new SpeechSynthesisUtterance(text);
-  const voice = pickRussianVoice();
-  if (voice) utter.voice = voice;
-  utter.lang = "ru-RU";
-  speechSynthesis.speak(utter);
+function speakBrowser(text) {
+  return new Promise((resolve) => {
+    if (!("speechSynthesis" in window)) return resolve();
+    const utter = new SpeechSynthesisUtterance(text);
+    const voice = pickRussianVoice();
+    if (voice) utter.voice = voice;
+    utter.lang = "ru-RU";
+    utter.onend = resolve;
+    utter.onerror = resolve;
+    speechSynthesis.speak(utter);
+  });
+}
+
+// Сначала пробуем серверный голос (Piper TTS) — заметно естественнее браузерного
+// SAPI-голоса. При любой ошибке (бинарник не установлен, сбой) тихо откатываемся
+// на встроенный голос браузера.
+async function speakOne(text) {
+  try {
+    const res = await fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    if (!res.ok) throw new Error("tts unavailable");
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    await new Promise((resolve) => {
+      const audio = new Audio(url);
+      audio.onended = resolve;
+      audio.onerror = resolve;
+      audio.play().catch(resolve);
+    });
+    URL.revokeObjectURL(url);
+  } catch {
+    await speakBrowser(text);
+  }
+}
+
+let speechQueue = [];
+let isSpeaking = false;
+
+async function processSpeechQueue() {
+  if (isSpeaking || speechQueue.length === 0) return;
+  isSpeaking = true;
+  const text = speechQueue.shift();
+  await speakOne(text);
+  isSpeaking = false;
+  processSpeechQueue();
+}
+
+function enqueueSpeech(text) {
+  if (!voiceToggle.checked) return;
+  speechQueue.push(text);
+  processSpeechQueue();
 }
 
 let lastSpokenId = null;
@@ -43,7 +90,7 @@ function speakNewMasterLines(log) {
   }
   const lastIndex = masterEntries.findIndex((e) => e.id === lastSpokenId);
   const newEntries = lastIndex === -1 ? masterEntries : masterEntries.slice(lastIndex + 1);
-  newEntries.forEach((e) => speak(e.text));
+  newEntries.forEach((e) => enqueueSpeech(e.text));
   if (masterEntries.length) lastSpokenId = masterEntries[masterEntries.length - 1].id;
 }
 

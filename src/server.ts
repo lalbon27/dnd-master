@@ -10,6 +10,7 @@ import { generateDungeon } from "./dungeon.js";
 import { introNarration, narrate } from "./master.js";
 import { transcribeAudio } from "./transcribe.js";
 import { generateFacePortrait, hasCloudflare } from "./portrait-ai.js";
+import { synthesizeSpeech } from "./tts.js";
 import {
   addCharacter,
   appendLog,
@@ -236,6 +237,20 @@ app.post("/api/action-audio", async (req, reply) => {
 
   const result = await handlePlayerAction(text, characterId, playerName);
   return { transcript: text, master: result };
+});
+
+app.post<{ Body: { text?: string } }>("/api/tts", async (req, reply) => {
+  const text = req.body?.text?.trim();
+  if (!text) return reply.code(400).send({ error: "text is required" });
+
+  try {
+    const audio = await synthesizeSpeech(text);
+    reply.type("audio/wav");
+    return audio;
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : String(err);
+    return reply.code(502).send({ error: `tts failed: ${detail}` });
+  }
 });
 
 const port = Number(process.env.PORT) || 3000;
