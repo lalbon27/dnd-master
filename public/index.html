@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Подземелья и Драконы</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" />
+  <style>
+    body.landing {
+      max-width: none;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 0%, rgba(184, 134, 47, 0.16), transparent 60%),
+        radial-gradient(ellipse 60% 40% at 20% 90%, rgba(122, 59, 59, 0.14), transparent 60%),
+        var(--bg);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      padding: 56px 20px 32px;
+      max-width: 640px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-family: "Cinzel", "Palatino Linotype", serif;
+      font-size: clamp(32px, 7vw, 56px);
+      margin: 0 0 18px;
+      color: var(--accent);
+      text-shadow: 0 0 28px rgba(184, 134, 47, 0.35);
+      line-height: 1.15;
+    }
+
+    .hero-tagline {
+      color: var(--text);
+      opacity: 0.85;
+      font-size: clamp(15px, 2.4vw, 18px);
+      line-height: 1.6;
+      max-width: 480px;
+      margin: 0 auto 36px;
+    }
+
+    .cta-btn {
+      font-family: "Cinzel", serif;
+      font-size: 17px;
+      letter-spacing: 0.04em;
+      padding: 16px 40px;
+      background: linear-gradient(180deg, #c9963f, var(--accent-2));
+      color: #1a1410;
+      font-weight: 700;
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      box-shadow: 0 8px 24px rgba(184, 134, 47, 0.25);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(184, 134, 47, 0.35);
+    }
+
+    .divider {
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 40px auto;
+    }
+
+    #role-picker {
+      padding: 0 20px 56px;
+      max-width: 640px;
+      width: 100%;
+    }
+
+    #role-picker[hidden] {
+      display: none;
+    }
+
+    #role-picker h2 {
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-family: inherit;
+    }
+
+    .role-grid {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .role-card {
+      flex: 1 1 220px;
+      display: block;
+      padding: 28px 20px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .role-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .role-card .icon {
+      font-size: 30px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .role-card .role-name {
+      font-family: "Cinzel", serif;
+      font-size: 17px;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .role-card .role-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #role-picker.show {
+      animation: fadeUp 0.4s ease both;
+    }
+  </style>
+</head>
+<body class="landing">
+  <div class="hero">
+    <div class="hero-eyebrow">Твой личный стол мастера</div>
+    <h1 class="hero-title">Подземелья<br />и Драконы</h1>
+    <p class="hero-tagline">
+      Карты рождаются на лету, герои обретают лица, а мастер — голос, который ведёт
+      партию сквозь тьму. Собери отряд и переступи порог.
+    </p>
+    <button id="start-btn" class="cta-btn">⚔ Начать игру</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <div id="role-picker" hidden>
+    <h2>Выбери роль</h2>
+    <div class="role-grid">
+      <a href="/dm.html" class="role-card">
+        <span class="icon">🗝️</span>
+        <span class="role-name">Пульт управления</span>
+        <span class="role-desc">Готовлю карты и героев, включаю озвучку. Рассказывает историю только ИИ-мастер.</span>
+      </a>
+      <a href="/player.html" class="role-card">
+        <span class="icon">🗡️</span>
+        <span class="role-name">Я игрок</span>
+        <span class="role-desc">Создаю героя и отвечаю ИИ-мастеру текстом или голосом с телефона.</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("start-btn").addEventListener("click", () => {
+      const picker = document.getElementById("role-picker");
+      picker.hidden = false;
+      picker.classList.add("show");
+      picker.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  </script>
+</body>
+</html>

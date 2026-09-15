@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Мастер</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <h1>Пульт управления</h1>
+  <p class="muted">Мастер во всех играх — ИИ. Здесь только подготовка: карты, персонажи, озвучка. Реплики рассказчика пишет исключительно ИИ в ответ на действия игроков.</p>
+  <p><a href="/">&larr; на главную</a></p>
+
+  <div class="panel phase-panel" id="phase-panel">
+    <div id="phase-setup">
+      <h2>Подготовка</h2>
+      <p id="phase-status-text" class="muted">Персонажей создано: 0.</p>
+      <button id="start-game-btn" class="primary phase-start-btn">▶ Начать игру</button>
+    </div>
+    <div id="phase-playing" hidden>
+      <span class="phase-live-dot"></span> Игра идёт — мастер отвечает на действия игроков в хронике ниже.
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Кампания</h2>
+    <div class="row">
+      <button id="reset-btn" class="primary">Новая кампания (сброс)</button>
+      <button id="dungeon-btn">Сгенерировать подземелье</button>
+    </div>
+    <div id="splash-wrap" class="splash-wrap" hidden>
+      <img id="splash-img" class="splash-img" alt="Атмосфера подземелья" />
+      <div class="splash-loading">Заставка готовится...</div>
+      <div class="splash-error">
+        <p>Не удалось загрузить картинку (проверь интернет-соединение).</p>
+        <button id="splash-retry">Повторить</button>
+      </div>
+    </div>
+    <div id="dungeon-banner" class="dungeon-banner" hidden></div>
+    <div id="dungeon-map-wrap" class="dungeon-map-wrap" hidden>
+      <canvas id="dungeon-canvas" class="dungeon-canvas"></canvas>
+    </div>
+    <div id="dungeon-legend" class="muted"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Персонажи отряда</h2>
+    <div class="row">
+      <input id="char-name" placeholder="Имя (необязательно)" />
+      <button id="char-btn" class="primary">Создать персонажа</button>
+    </div>
+    <div id="characters"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Хроника</h2>
+    <label class="muted"><input type="checkbox" id="voice-toggle" /> 🔊 Озвучивать реплики мастера</label>
+    <div id="log" class="log"></div>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/dm.js"></script>
+</body>
+</html>

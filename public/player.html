@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Игрок</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <h1>Экран игрока</h1>
+  <p><a href="/">&larr; на главную</a></p>
+
+  <div id="splash-wrap" class="splash-wrap" hidden>
+    <img id="splash-img" class="splash-img" alt="Атмосфера подземелья" />
+    <div class="splash-loading">Заставка готовится...</div>
+    <div class="splash-error">
+      <p>Не удалось загрузить картинку.</p>
+      <button id="splash-retry">Повторить</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Мой персонаж</h2>
+    <select id="char-select"></select>
+    <div id="char-sheet" class="muted" style="margin-top: 10px"></div>
+    <button id="new-char-toggle" style="margin-top: 10px">✨ Создать нового героя</button>
+  </div>
+
+  <div class="panel" id="wizard" hidden>
+    <h2>Создание героя</h2>
+
+    <div id="wizard-step-0" class="wizard-step">
+      <p><b>Как тебя зовут на самом деле?</b></p>
+      <p class="muted">Мастер придумает фэнтезийное имя героя, созвучное твоему.</p>
+      <input id="wizard-realname" placeholder="Твоё имя" />
+      <button id="wizard-to-archetype" class="primary" style="margin-top: 8px">Далее</button>
+    </div>
+
+    <div id="wizard-step-1" class="wizard-step" hidden>
+      <p><b>1. Что тебе ближе в трудную минуту?</b></p>
+      <div class="row">
+        <button data-archetype="strength" class="wizard-choice">💪 Сила</button>
+        <button data-archetype="cunning" class="wizard-choice">🗡️ Хитрость</button>
+        <button data-archetype="knowledge" class="wizard-choice">📖 Знание</button>
+        <button data-archetype="charisma" class="wizard-choice">🎭 Слово</button>
+      </div>
+    </div>
+
+    <div id="wizard-step-2" class="wizard-step" hidden>
+      <p><b>2. Каким тебя видят друзья?</b></p>
+      <div class="row">
+        <button data-vibe="reliable" class="wizard-choice">🛡️ Надёжным</button>
+        <button data-vibe="bold" class="wizard-choice">🔥 Дерзким</button>
+        <button data-vibe="mysterious" class="wizard-choice">🌙 Загадочным</button>
+        <button data-vibe="funny" class="wizard-choice">😄 Весёлым</button>
+      </div>
+    </div>
+
+    <div id="wizard-step-3" class="wizard-step" hidden>
+      <p><b>3. Девиз твоего героя</b></p>
+      <input id="wizard-motto" placeholder="Например: «Лучше живым трусом, чем мёртвым храбрецом»" />
+      <button id="wizard-to-selfie" class="primary" style="margin-top: 8px">Далее</button>
+    </div>
+
+    <div id="wizard-step-4" class="wizard-step" hidden>
+      <p><b>Сделай селфи</b> — оно останется только на этом устройстве, рядом с портретом героя.</p>
+      <video id="selfie-video" autoplay playsinline muted style="width: 100%; max-width: 280px; border-radius: 8px"></video>
+      <canvas id="selfie-canvas" hidden></canvas>
+      <img id="selfie-preview" hidden style="width: 100%; max-width: 280px; border-radius: 8px" />
+      <div class="row" style="margin-top: 8px">
+        <button id="selfie-shoot">📸 Снять</button>
+        <button id="selfie-retake" hidden>↺ Переснять</button>
+        <button id="selfie-skip">Пропустить</button>
+      </div>
+      <button id="wizard-submit" class="primary" style="margin-top: 8px">Создать героя</button>
+    </div>
+
+    <p id="wizard-status" class="muted"></p>
+  </div>
+
+  <div class="panel waiting-panel" id="waiting-panel">
+    <div class="spinner">⏳</div>
+    <p><b>Ждём начала игры</b></p>
+    <p class="muted">Создай своего героя выше. Мастер начнёт историю, когда все будут готовы.</p>
+  </div>
+
+  <div id="playing-panels" hidden>
+    <div class="panel">
+      <h2>Хроника</h2>
+      <div id="log" class="log"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Твой ход</h2>
+      <textarea id="action-text" rows="3" placeholder="Что ты делаешь?"></textarea>
+      <div class="row" style="margin-top: 8px">
+        <button id="action-btn" class="primary">Отправить текстом</button>
+        <button id="record-btn">🎤 Записать голосом</button>
+      </div>
+      <p id="record-status" class="muted"></p>
+    </div>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/player.js"></script>
+</body>
+</html>
