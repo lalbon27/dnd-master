@@ -54,7 +54,7 @@ function toRunnablePath(p: string): string {
   return path.join(shortenDir(path.dirname(p)), path.basename(p));
 }
 
-function runPiper(exe: string, args: string[], text: string, timeoutMs = 20000): Promise<void> {
+function runPiper(exe: string, args: string[], text: string, timeoutMs = 60000): Promise<void> {
   return new Promise((resolve, reject) => {
     const child = spawn(exe, args);
     const timer = setTimeout(() => {
